@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 '''
+    Copyright (C) 2017, Zvonimir Rudinski
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -31,26 +32,22 @@ def start(arg):
         print '\___________________________\/'
         print ' \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\' + Style.RESET_ALL + Style.BRIGHT
 
-        print Fore.WHITE + '\nPowered by ' + Fore.BLUE + 'Pyt' + Fore.YELLOW + 'hon' + Fore.WHITE + ' 2.7\nNapisao Zvonimir Rudinski'
+        print Fore.WHITE + '\nPowered by ' + Fore.BLUE + 'Pyt' + Fore.YELLOW + 'hon' + Fore.WHITE + ' 2.7\nCopyright (C) 2017, Zvonimir Rudinski'
         fileName = None
         try:
             if arg is None:
-	        print 'Ako zelite da procitate o programu unesite \'-p\' kao argument'
-                fileName = raw_input('Molim vas unesite ime fajla: ')
+	        print 'If you wish to know more please enter \'-p\' as an arguement'
+                fileName = raw_input('File path: ')
             elif arg == '-p':
-	        print '\nOvaj ' + Fore.BLUE + 'Intel' + Fore.WHITE + ' 8080 assembler je napisan za ' + Fore.BLUE + 'Projektnu ' + Fore.YELLOW + 'Nedelju' + Fore.WHITE
-	        print 'Napisan je u ' + Fore.BLUE + 'Pyt' + Fore.YELLOW + 'hon' + Fore.WHITE + ' 2.7'
-	        print 'Koristi se ' + Fore.RED + 'Co' + Fore.BLUE +'lo'+Fore.YELLOW+'ra'+Fore.GREEN+'ma'+Fore.WHITE+' 3rd party module,\na sve je ostalo ugradjeno u sam jezik\n'
-	        print 'Zahvale:' + Fore.YELLOW
-	        print 'Guido Van Rossum - Autor Python-a' + Fore.WHITE + Style.DIM
-	        print 'emulator101.com - Hex zapisi za 8080' + Style.RESET_ALL + Style.BRIGHT
-	        print Fore.RED + 'Co' + Fore.BLUE +'lo'+Fore.YELLOW+'ra'+Fore.GREEN+'ma'+Fore.WHITE+' module za Python'
+	        print '\nThis ' + Fore.BLUE + 'Intel' + Fore.WHITE + ' 8080 assembler was made for ' + Fore.BLUE + 'Project ' + Fore.YELLOW + 'Week' + Fore.WHITE + ' in my school'
+	        print 'It is written in ' + Fore.BLUE + 'Pyt' + Fore.YELLOW + 'hon' + Fore.WHITE + ' 2.7'
+	        print 'Modules: ' + Fore.RED + 'Co' + Fore.BLUE +'lo'+Fore.YELLOW+'ra'+Fore.GREEN+'ma'+Fore.WHITE
 	        exit(0)
             else:
                 fileName = arg
-            print '\nOtvaram \'' + Fore.YELLOW + fileName + '\'' + Fore.WHITE
+            print '\Trying to open \'' + Fore.YELLOW + fileName + '\'' + Fore.WHITE
             if path.isfile(fileName) is False:
-                print Fore.RED + 'Fatal error: ' + Fore.WHITE + 'Ne mogu da pronadjem \'' + Fore.YELLOW + fileName + '\''
+                print Fore.RED + 'Fatal error: ' + Fore.WHITE + 'Can\'t open \'' + Fore.YELLOW + fileName + '\''
                 raise IOError
             sourceCode = None
             with open(fileName,'r') as sourceFile:
@@ -73,7 +70,7 @@ def start(arg):
                         except ValueError:
 			                    raise TypeError
                         except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'stax b':
                             romFile.write(pack('B',2))
@@ -93,7 +90,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'rlc':
                         romFile.write(pack('B',7))
@@ -117,7 +114,7 @@ def start(arg):
                         except ValueError:
 			                    raise TypeError
                         except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == "rrc":
                         romFile.write(pack('B',15))
@@ -131,7 +128,7 @@ def start(arg):
                         except ValueError:
 			                    raise TypeError
                         except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'stax d':
                             romFile.write(pack('B',18))
@@ -151,7 +148,7 @@ def start(arg):
                         except ValueError:
 			                    raise TypeError
                         except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'ral':
                             romFile.write(pack('B',23))
@@ -175,7 +172,7 @@ def start(arg):
                         except ValueError:
 			                    raise TypeError
                         except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'rar':
                             romFile.write(pack('B',31))
@@ -191,7 +188,7 @@ def start(arg):
                         except ValueError:
 			                    raise TypeError
                         except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine.startswith('shld'):
                         romFile.write(pack('B',34))
@@ -203,7 +200,7 @@ def start(arg):
                         except ValueError:
 			                    raise TypeError
                         except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'inx h':
                             romFile.write(pack('B',35))
@@ -221,7 +218,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'daa':
                             romFile.write(pack('B',39))
@@ -237,7 +234,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'dcx h':
                             romFile.write(pack('B',43))
@@ -255,7 +252,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'cma':
                             romFile.write(pack('B',47))
@@ -271,7 +268,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine.startswith('sta'):
                             romFile.write(pack('B',50))
@@ -283,7 +280,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'inx sp':
                             romFile.write(pack('B',51))
@@ -301,7 +298,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'stc':
                             romFile.write(pack('B',55))
@@ -317,7 +314,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'dcx sp':
                             romFile.write(pack('B',59))
@@ -335,7 +332,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'cmc':
                             romFile.write(pack('B',63))
@@ -609,7 +606,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine.startswith('jmp'):
                             romFile.write(pack('B',195))
@@ -621,7 +618,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine.startswith('cnz'):
                             romFile.write(pack('B',196))
@@ -633,7 +630,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'push b':
                                 romFile.write(pack('B',197))
@@ -647,7 +644,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'rst 0':
                             romFile.write(pack('B',199))
@@ -665,7 +662,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine.startswith('cz'):
                             romFile.write(pack('B',204))
@@ -677,7 +674,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine.startswith('call'):
                             romFile.write(pack('B',205))
@@ -689,7 +686,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine.startswith('aci'):
                             romFile.write(pack('B',206))
@@ -701,7 +698,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'rst 1':
                             romFile.write(pack('B',207))
@@ -719,7 +716,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine.startswith('out'):
                             romFile.write(pack('B',211))
@@ -731,7 +728,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine.startswith('cnc'):
                             romFile.write(pack('B',212))
@@ -743,7 +740,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'push d':
                             romFile.write(pack('B',213))
@@ -757,7 +754,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'rst 2':
                             romFile.write(pack('B',215))
@@ -773,7 +770,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine.startswith('in'):
                             romFile.write(pack('B',219))
@@ -785,7 +782,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine.startswith('cc'):
                             romFile.write(pack('B',220))
@@ -797,7 +794,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine.startswith('sbi'):
                             romFile.write(pack('B',222))
@@ -809,7 +806,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'rst 3':
                             romFile.write(pack('B',223))
@@ -827,7 +824,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'xthl':
                             romFile.write(pack('B',227))
@@ -841,7 +838,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'push h':
                             romFile.write(pack('B',229))
@@ -855,7 +852,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'rst 4':
                             romFile.write(pack('B',231))
@@ -873,7 +870,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'xchg':
                             romFile.write(pack('B',235))
@@ -887,7 +884,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine.startswith('xri'):
                             romFile.write(pack('B',238))
@@ -899,7 +896,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'rst 5':
                             romFile.write(pack('B',239))
@@ -917,7 +914,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'di':
                             romFile.write(pack('B',243))
@@ -931,7 +928,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'push psw':
                             romFile.write(pack('B',245))
@@ -945,7 +942,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'rst 6':
                             romFile.write(pack('B',247))
@@ -963,7 +960,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'ei':
                             romFile.write(pack('B',251))
@@ -977,7 +974,7 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine.startswith('cpi'):
                             romFile.write(pack('B',254))
@@ -989,31 +986,31 @@ def start(arg):
                             except ValueError:
 			                    raise TypeError
                             except TypeError:
-                                print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                                 exit(-1)
                     elif scLine == 'rst 7':
                             romFile.write(pack('B',255))
                     elif scLine.split(' ')[1] == 'equ':
                             try:
                                 variableAddr[scLine.split(' ')[0]] = unhex(scLine.split(' ')[2])
-                                print 'Menjam listu promenljivih'
+                                print 'Updating variables'
                             except TypeError:
-                                print Fore.RED + 'Broj cifri nije deljiv sa 2: ' + scLine + ' : Linija ' + str(i)
+                                print Fore.RED + 'Digit count not divisable by 2: ' + scLine + ' : Linija ' + str(i)
                                 exit(-1)
                     else:
-                            print Fore.RED + 'Syntax error: ' + scLine + ' : Linija ' + str(i)
+                            print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
                             exit(-1)
 
 
-            print Fore.WHITE + 'Zatvaram \'' + Fore.YELLOW + fileName + Fore.WHITE + '\'\nSve je proslo ' + Fore.GREEN + 'super'
+            print Fore.WHITE + 'Closing down... \'' + Fore.YELLOW + fileName + Fore.WHITE + '\'\nEverything went ' + Fore.GREEN + 'fine'
         except KeyboardInterrupt:
-            print Fore.RED + '\nIzlazim...'
+            print Fore.RED + '\nExiting...'
             exit(-1)
         except EOFError:
-            print Fore.RED + '\nIzlazim...'
+            print Fore.RED + '\nExiting...'
             exit(-1)
         except IOError:
-            print Fore.RED + 'Izlazim...'
+            print Fore.RED + 'Exiting...'
             exit(-1)
 
 if __name__ == "__main__":

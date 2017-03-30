@@ -1,5 +1,6 @@
 # 8080py
 ### Intel 8080 Assembler<br />
+Copyright (C) 2017, Zvonimir Rudinski<br />
 ![Python](https://www.python.org/static/community_logos/python-logo-master-v3-TM.png "Written in Python")<br >
 8080py is a basic Intel 8080 Assembler written in Python.<br />
 I made this in 48 hours for the school science fair.<br /><br />
@@ -15,3 +16,4 @@ GNU General Public License for more details.<br />
 <br />
 You should have received a copy of the GNU General Public License<br />
 along with this program.  If not, see http://www.gnu.org/licenses/.<br />
+
