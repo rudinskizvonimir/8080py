@@ -45,7 +45,7 @@ def start(arg):
 	        exit(0)
             else:
                 fileName = arg
-            print '\Trying to open \'' + Fore.YELLOW + fileName + '\'' + Fore.WHITE
+            print 'Trying to open \'' + Fore.YELLOW + fileName + '\'' + Fore.WHITE
             if path.isfile(fileName) is False:
                 print Fore.RED + 'Fatal error: ' + Fore.WHITE + 'Can\'t open \'' + Fore.YELLOW + fileName + '\''
                 raise IOError
