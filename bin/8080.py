@@ -18,7 +18,7 @@ from os import path
 from sys import argv, exit
 from colorama import init, Fore, Back, Style
 from struct import pack
-from binascii import UnHexlify as UnHex
+from binascii import unhexlify as UnHex
 
 init()
 
