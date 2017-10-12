@@ -1,5 +1,8 @@
 #!/usr/bin/env python
-'''
+# coding=utf-8
+from __future__ import print_function
+
+"""
     Copyright (C) 2017, Zvonimir Rudinski
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -13,1054 +16,1018 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 from os import path
 from sys import argv, exit
-from colorama import init, Fore, Back, Style
+from colorama import init, Fore, Style
 from struct import pack
 from binascii import unhexlify as UnHex
+
+try:
+    input = raw_input  # Python2
+except NameError:
+    pass  # Python3
 
 init()
 
 
-def start(arg):
-    print Style.DIM
-    print '     ___________________________'
-    print '    /                           /\\'
-    print '   /       Zvonimirov         _/ /\\'
-    print '  /        Intel 8080        / \/'
-    print ' /         Assembler         /\\'
-    print '/___________________________/ /'
-    print '\___________________________\/'
-    print ' \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\' + Style.RESET_ALL + Style.BRIGHT
+def start(arg=None):
+    print(Style.DIM)
+    print('     ___________________________')
+    print('    /                           /\\')
+    print('   /       Zvonimirov         _/ /\\')
+    print('  /        Intel 8080        / \/')
+    print(' /         Assembler         /\\')
+    print('/___________________________/ /')
+    print('\___________________________\/')
+    print(' \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\' + Style.RESET_ALL + Style.BRIGHT)
 
-    print Fore.WHITE + '\nPowered by ' + Fore.BLUE + 'Pyt' + Fore.YELLOW + 'hon' + Fore.WHITE + ' 2.7\nCopyright (C) 2017, Zvonimir Rudinski'
-    fileName = None
+    print(Fore.WHITE + '\nPowered by ' + Fore.BLUE + 'Pyt' + Fore.YELLOW
+          + 'hon' + Fore.WHITE + '\nCopyright (C) 2017, Zvonimir Rudinski')
+    file_name = None
     try:
         if arg is None:
-            print 'If you wish to know more please enter \'-p\' as an arguement'
-            fileName = raw_input('File path: ')
+            print('If you wish to know more please enter \'-p\' as an arguement')
+            file_name = input('File path: ')
         elif arg == '-p':
-            print '\nThis ' + Fore.BLUE + 'Intel' + Fore.WHITE + ' 8080 assembler was made for ' + Fore.BLUE + 'Project ' + Fore.YELLOW + 'Week' + Fore.WHITE + ' in my school'
-            print 'It is written in ' + Fore.BLUE + 'Pyt' + Fore.YELLOW + 'hon' + Fore.WHITE + ' 2.7'
-            print 'Modules: ' + Fore.RED + 'Co' + Fore.BLUE + 'lo' + Fore.YELLOW + 'ra' + Fore.GREEN + 'ma' + Fore.WHITE
+            print('\nThis ' + Fore.BLUE + 'Intel' + Fore.WHITE + ' 8080 assembler was made for '
+                  + Fore.BLUE + 'Project ' + Fore.YELLOW + 'Week' + Fore.WHITE + ' in my school')
+            print('It is written in ' + Fore.BLUE + 'Pyt' + Fore.YELLOW + 'hon' + Fore.WHITE + ' 2.7')
+            print('Modules: ' + Fore.RED + 'Co' + Fore.BLUE + 'lo' +
+                  Fore.YELLOW + 'ra' + Fore.GREEN + 'ma' + Fore.WHITE)
             exit(0)
         else:
-            fileName = arg
-        print 'Trying to open \'' + Fore.YELLOW + fileName + '\'' + Fore.WHITE
-        if path.isfile(fileName) is False:
-            print Fore.RED + 'Fatal error: ' + Fore.WHITE + 'Can\'t open \'' + Fore.YELLOW + fileName + '\''
+            file_name = arg
+        print('Trying to open \'' + Fore.YELLOW + file_name + '\'' + Fore.WHITE)
+        if path.isfile(file_name) is False:
+            print(Fore.RED + 'Fatal error: ' + Fore.WHITE + 'Can\'t open \'' + Fore.YELLOW + file_name + '\'')
             raise IOError
-        sourceCode = None
-        with open(fileName, 'r') as sourceFile:
-            sourceCode = sourceFile.readlines()
-        for i in range(0, len(sourceCode)):
-            sourceCode[i] = sourceCode[i].split('\n')[0]
-        variableAddr = {'null': UnHex('00')}
-        with open(fileName + '.rom', 'w+') as romFile:
-            for i in range(0, len(sourceCode)):
-                scLine = sourceCode[i].lower()
-                if scLine == 'nop':
+
+        with open(file_name, 'r') as sourceFile:
+            source_code = sourceFile.readlines()
+        for i in range(0, len(source_code)):
+            source_code[i] = source_code[i].split('\n')[0]
+        variable_addr = {'null': UnHex('00')}
+        with open(file_name + '.rom', 'wb+') as romFile:
+            for i in range(0, len(source_code)):
+                sc_line = source_code[i].lower()
+                if sc_line == 'nop':
                     romFile.write(pack('B', 0))
-                elif scLine.startswith('lxi b,'):
+                elif sc_line.startswith('lxi b,'):
                     romFile.write(pack('B', 1))
                     try:
-                        if scLine.split(',')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(',')[1]][0:4])
+                        if sc_line.split(',')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(',')[1]][0:4])
                         else:
-                            romFile.write(UnHex(scLine.split(',')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(',')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'stax b':
+                elif sc_line == 'stax b':
                     romFile.write(pack('B', 2))
-                elif scLine == 'inx b':
+                elif sc_line == 'inx b':
                     romFile.write(pack('B', 3))
-                elif scLine == 'inr b':
+                elif sc_line == 'inr b':
                     romFile.write(pack('B', 4))
-                elif scLine == 'dcr b':
+                elif sc_line == 'dcr b':
                     romFile.write(pack('B', 5))
-                elif scLine.startswith('mvi b,'):
+                elif sc_line.startswith('mvi b,'):
                     romFile.write(pack('B', 6))
                     try:
-                        if scLine.split(',')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(',')[1]][0:1])
+                        if sc_line.split(',')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(',')[1]][0:1])
                         else:
-                            romFile.write(UnHex(scLine.split(',')[1][0:2]))
+                            romFile.write(UnHex(sc_line.split(',')[1][0:2]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'rlc':
+                elif sc_line == 'rlc':
                     romFile.write(pack('B', 7))
-                elif scLine == 'dad b':
+                elif sc_line == 'dad b':
                     romFile.write(pack('B', 9))
-                elif scLine == 'ldax b':
+                elif sc_line == 'ldax b':
                     romFile.write(pack('B', 10))
-                elif scLine == 'dcx b':
+                elif sc_line == 'dcx b':
                     romFile.write(pack('B', 11))
-                elif scLine == 'inr c':
+                elif sc_line == 'inr c':
                     romFile.write(pack('B', 12))
-                elif scLine == 'dcr c':
+                elif sc_line == 'dcr c':
                     romFile.write(pack('B', 13))
-                elif scLine.startswith('mvi c,'):
+                elif sc_line.startswith('mvi c,'):
                     romFile.write(pack('B', 14))
                     try:
-                        if scLine.split(',')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(',')[1]][0:1])
+                        if sc_line.split(',')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(',')[1]][0:1])
                         else:
-                            romFile.write(UnHex(scLine.split(',')[1][0:2]))
+                            romFile.write(UnHex(sc_line.split(',')[1][0:2]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == "rrc":
+                elif sc_line == "rrc":
                     romFile.write(pack('B', 15))
-                elif scLine.startswith('lxi d,'):
+                elif sc_line.startswith('lxi d,'):
                     romFile.write(pack('B', 17))
                     try:
-                        if scLine.split(',')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(',')[1]][0:2])
+                        if sc_line.split(',')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(',')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(',')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(',')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'stax d':
+                elif sc_line == 'stax d':
                     romFile.write(pack('B', 18))
-                elif scLine == 'inx d':
+                elif sc_line == 'inx d':
                     romFile.write(pack('B', 19))
-                elif scLine == 'inr d':
+                elif sc_line == 'inr d':
                     romFile.write(pack('B', 20))
-                elif scLine == 'dcr d':
+                elif sc_line == 'dcr d':
                     romFile.write(pack('B', 21))
-                elif scLine.startswith('mvi d,'):
+                elif sc_line.startswith('mvi d,'):
                     romFile.write(pack('B', 22))
                     try:
-                        if scLine.split(',')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(',')[1]][0:1])
+                        if sc_line.split(',')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(',')[1]][0:1])
                         else:
-                            romFile.write(UnHex(scLine.split(',')[1][0:2]))
+                            romFile.write(UnHex(sc_line.split(',')[1][0:2]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'ral':
+                elif sc_line == 'ral':
                     romFile.write(pack('B', 23))
-                elif scLine == 'dad d':
+                elif sc_line == 'dad d':
                     romFile.write(pack('B', 25))
-                elif scLine == 'ldax d':
+                elif sc_line == 'ldax d':
                     romFile.write(pack('B', 26))
-                elif scLine == 'dcx d':
+                elif sc_line == 'dcx d':
                     romFile.write(pack('B', 27))
-                elif scLine == 'inr e':
+                elif sc_line == 'inr e':
                     romFile.write(pack('B', 28))
-                elif scLine == 'dcr e':
+                elif sc_line == 'dcr e':
                     romFile.write(pack('B', 29))
-                elif scLine.startswith('mvi e,'):
+                elif sc_line.startswith('mvi e,'):
                     romFile.write(pack('B', 30))
                     try:
-                        if scLine.split(',')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(',')[1]][0:1])
+                        if sc_line.split(',')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(',')[1]][0:1])
                         else:
-                            romFile.write(UnHex(scLine.split(',')[1][0:2]))
+                            romFile.write(UnHex(sc_line.split(',')[1][0:2]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'rar':
+                elif sc_line == 'rar':
                     romFile.write(pack('B', 31))
-                elif scLine == 'rim':
+                elif sc_line == 'rim':
                     romFile.write(pack('B', 32))
-                elif scLine.startswith('lxi h,'):
+                elif sc_line.startswith('lxi h,'):
                     romFile.write(pack('B', 33))
                     try:
-                        if scLine.split(',')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(',')[1]][0:2])
+                        if sc_line.split(',')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(',')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(',')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(',')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine.startswith('shld'):
+                elif sc_line.startswith('shld'):
                     romFile.write(pack('B', 34))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:2])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'inx h':
+                elif sc_line == 'inx h':
                     romFile.write(pack('B', 35))
-                elif scLine == 'inr h':
+                elif sc_line == 'inr h':
                     romFile.write(pack('B', 36))
-                elif scLine == 'dcr h':
+                elif sc_line == 'dcr h':
                     romFile.write(pack('B', 37))
-                elif scLine.startswith('mvi h,'):
+                elif sc_line.startswith('mvi h,'):
                     romFile.write(pack('B', 38))
                     try:
-                        if scLine.split(',')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(',')[1]][0:1])
+                        if sc_line.split(',')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(',')[1]][0:1])
                         else:
-                            romFile.write(UnHex(scLine.split(',')[1][0:2]))
+                            romFile.write(UnHex(sc_line.split(',')[1][0:2]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'daa':
+                elif sc_line == 'daa':
                     romFile.write(pack('B', 39))
-                elif scLine == 'dad h':
+                elif sc_line == 'dad h':
                     romFile.write(pack('B', 41))
-                elif scLine.startswith('lhld'):
+                elif sc_line.startswith('lhld'):
                     romFile.write(pack('B', 42))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:2])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'dcx h':
+                elif sc_line == 'dcx h':
                     romFile.write(pack('B', 43))
-                elif scLine == 'inr l':
+                elif sc_line == 'inr l':
                     romFile.write(pack('B', 44))
-                elif scLine == 'dcr l':
+                elif sc_line == 'dcr l':
                     romFile.write(pack('B', 45))
-                elif scLine.startswith('mvi l,'):
+                elif sc_line.startswith('mvi l,'):
                     romFile.write(pack('B', 46))
                     try:
-                        if scLine.split(',')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(',')[1]][0:2])
+                        if sc_line.split(',')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(',')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(',')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(',')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'cma':
+                elif sc_line == 'cma':
                     romFile.write(pack('B', 47))
-                elif scLine == 'sim':
+                elif sc_line == 'sim':
                     romFile.write(pack('B', 48))
-                elif scLine.startswith('lxi sp,'):
+                elif sc_line.startswith('lxi sp,'):
                     romFile.write(pack('B', 49))
                     try:
-                        if scLine.split(',')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(',')[1]][0:2])
+                        if sc_line.split(',')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(',')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(',')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(',')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine.startswith('sta'):
+                elif sc_line.startswith('sta'):
                     romFile.write(pack('B', 50))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:2])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'inx sp':
+                elif sc_line == 'inx sp':
                     romFile.write(pack('B', 51))
-                elif scLine == 'inr m':
+                elif sc_line == 'inr m':
                     romFile.write(pack('B', 52))
-                elif scLine == 'dcr m':
+                elif sc_line == 'dcr m':
                     romFile.write(pack('B', 53))
-                elif scLine.startswith('mvi m,'):
+                elif sc_line.startswith('mvi m,'):
                     romFile.write(pack('B', 54))
                     try:
-                        if scLine.split(',')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(',')[1]][0:1])
+                        if sc_line.split(',')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(',')[1]][0:1])
                         else:
-                            romFile.write(UnHex(scLine.split(',')[1][0:2]))
+                            romFile.write(UnHex(sc_line.split(',')[1][0:2]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'stc':
+                elif sc_line == 'stc':
                     romFile.write(pack('B', 55))
-                elif scLine == 'dad sp':
+                elif sc_line == 'dad sp':
                     romFile.write(pack('B', 57))
-                elif scLine.startswith('lda'):
+                elif sc_line.startswith('lda'):
                     romFile.write(pack('B', 58))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:2])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'dcx sp':
+                elif sc_line == 'dcx sp':
                     romFile.write(pack('B', 59))
-                elif scLine == 'inr a':
+                elif sc_line == 'inr a':
                     romFile.write(pack('B', 60))
-                elif scLine == 'dcr a':
+                elif sc_line == 'dcr a':
                     romFile.write(pack('B', 61))
-                elif scLine.startswith('mvi a,'):
+                elif sc_line.startswith('mvi a,'):
                     romFile.write(pack('B', 62))
                     try:
-                        if scLine.split(',')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(',')[1]][0:1])
+                        if sc_line.split(',')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(',')[1]][0:1])
                         else:
-                            romFile.write(UnHex(scLine.split(',')[1][0:2]))
+                            romFile.write(UnHex(sc_line.split(',')[1][0:2]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'cmc':
+                elif sc_line == 'cmc':
                     romFile.write(pack('B', 63))
-                elif scLine == 'mov b,b':
+                elif sc_line == 'mov b,b':
                     romFile.write(pack('B', 64))
-                elif scLine == 'mov b,c':
+                elif sc_line == 'mov b,c':
                     romFile.write(pack('B', 65))
-                elif scLine == 'mov b,d':
+                elif sc_line == 'mov b,d':
                     romFile.write(pack('B', 66))
-                elif scLine == 'mov b,e':
+                elif sc_line == 'mov b,e':
                     romFile.write(pack('B', 67))
-                elif scLine == 'mov b,h':
+                elif sc_line == 'mov b,h':
                     romFile.write(pack('B', 68))
-                elif scLine == 'mov b,l':
+                elif sc_line == 'mov b,l':
                     romFile.write(pack('B', 69))
-                elif scLine == 'mov b,m':
+                elif sc_line == 'mov b,m':
                     romFile.write(pack('B', 70))
-                elif scLine == 'mov b,a':
+                elif sc_line == 'mov b,a':
                     romFile.write(pack('B', 71))
-                elif scLine == 'mov c,b':
+                elif sc_line == 'mov c,b':
                     romFile.write(pack('B', 72))
-                elif scLine == 'mov c,c':
+                elif sc_line == 'mov c,c':
                     romFile.write(pack('B', 73))
-                elif scLine == 'mov c,d':
+                elif sc_line == 'mov c,d':
                     romFile.write(pack('B', 74))
-                elif scLine == 'mov c,e':
+                elif sc_line == 'mov c,e':
                     romFile.write(pack('B', 75))
-                elif scLine == 'mov c,h':
+                elif sc_line == 'mov c,h':
                     romFile.write(pack('B', 76))
-                elif scLine == 'mov c,l':
+                elif sc_line == 'mov c,l':
                     romFile.write(pack('B', 77))
-                elif scLine == 'mov c,m':
+                elif sc_line == 'mov c,m':
                     romFile.write(pack('B', 78))
-                elif scLine == 'mov c,a':
+                elif sc_line == 'mov c,a':
                     romFile.write(pack('B', 79))
-                elif scLine == 'mov d,b':
+                elif sc_line == 'mov d,b':
                     romFile.write(pack('B', 80))
-                elif scLine == 'mov d,c':
+                elif sc_line == 'mov d,c':
                     romFile.write(pack('B', 81))
-                elif scLine == 'mov d,d':
+                elif sc_line == 'mov d,d':
                     romFile.write(pack('B', 82))
-                elif scLine == 'mov d,e':
+                elif sc_line == 'mov d,e':
                     romFile.write(pack('B', 83))
-                elif scLine == 'mov d,h':
+                elif sc_line == 'mov d,h':
                     romFile.write(pack('B', 84))
-                elif scLine == 'mov d,l':
+                elif sc_line == 'mov d,l':
                     romFile.write(pack('B', 85))
-                elif scLine == 'mov d,m':
+                elif sc_line == 'mov d,m':
                     romFile.write(pack('B', 86))
-                elif scLine == 'mov d,a':
+                elif sc_line == 'mov d,a':
                     romFile.write(pack('B', 87))
-                elif scLine == 'mov e,b':
+                elif sc_line == 'mov e,b':
                     romFile.write(pack('B', 88))
-                elif scLine == 'mov e,c':
+                elif sc_line == 'mov e,c':
                     romFile.write(pack('B', 89))
-                elif scLine == 'mov e,d':
+                elif sc_line == 'mov e,d':
                     romFile.write(pack('B', 90))
-                elif scLine == 'mov e,e':
+                elif sc_line == 'mov e,e':
                     romFile.write(pack('B', 91))
-                elif scLine == 'mov e,h':
+                elif sc_line == 'mov e,h':
                     romFile.write(pack('B', 92))
-                elif scLine == 'mov e,l':
+                elif sc_line == 'mov e,l':
                     romFile.write(pack('B', 93))
-                elif scLine == 'mov e,m':
+                elif sc_line == 'mov e,m':
                     romFile.write(pack('B', 94))
-                elif scLine == 'mov e,a':
+                elif sc_line == 'mov e,a':
                     romFile.write(pack('B', 95))
-                elif scLine == 'mov h,b':
+                elif sc_line == 'mov h,b':
                     romFile.write(pack('B', 96))
-                elif scLine == 'mov h,c':
+                elif sc_line == 'mov h,c':
                     romFile.write(pack('B', 97))
-                elif scLine == 'mov h,d':
+                elif sc_line == 'mov h,d':
                     romFile.write(pack('B', 98))
-                elif scLine == 'mov h,e':
+                elif sc_line == 'mov h,e':
                     romFile.write(pack('B', 99))
-                elif scLine == 'mov h,h':
+                elif sc_line == 'mov h,h':
                     romFile.write(pack('B', 100))
-                elif scLine == 'mov h,l':
+                elif sc_line == 'mov h,l':
                     romFile.write(pack('B', 101))
-                elif scLine == 'mov h,m':
+                elif sc_line == 'mov h,m':
                     romFile.write(pack('B', 102))
-                elif scLine == 'mov h,a':
+                elif sc_line == 'mov h,a':
                     romFile.write(pack('B', 103))
-                elif scLine == 'mov l,b':
+                elif sc_line == 'mov l,b':
                     romFile.write(pack('B', 104))
-                elif scLine == 'mov l,c':
+                elif sc_line == 'mov l,c':
                     romFile.write(pack('B', 105))
-                elif scLine == 'mov l,d':
+                elif sc_line == 'mov l,d':
                     romFile.write(pack('B', 106))
-                elif scLine == 'mov l,e':
+                elif sc_line == 'mov l,e':
                     romFile.write(pack('B', 107))
-                elif scLine == 'mov l,h':
+                elif sc_line == 'mov l,h':
                     romFile.write(pack('B', 108))
-                elif scLine == 'mov l,l':
+                elif sc_line == 'mov l,l':
                     romFile.write(pack('B', 109))
-                elif scLine == 'mov l,m':
+                elif sc_line == 'mov l,m':
                     romFile.write(pack('B', 110))
-                elif scLine == 'mov l,a':
+                elif sc_line == 'mov l,a':
                     romFile.write(pack('B', 111))
-                elif scLine == 'mov m,b':
+                elif sc_line == 'mov m,b':
                     romFile.write(pack('B', 112))
-                elif scLine == 'mov m,c':
+                elif sc_line == 'mov m,c':
                     romFile.write(pack('B', 113))
-                elif scLine == 'mov m,d':
+                elif sc_line == 'mov m,d':
                     romFile.write(pack('B', 114))
-                elif scLine == 'mov m,e':
+                elif sc_line == 'mov m,e':
                     romFile.write(pack('B', 115))
-                elif scLine == 'mov m,h':
+                elif sc_line == 'mov m,h':
                     romFile.write(pack('B', 116))
-                elif scLine == 'mov m,l':
+                elif sc_line == 'mov m,l':
                     romFile.write(pack('B', 117))
-                elif scLine == 'hlt':
+                elif sc_line == 'hlt':
                     romFile.write(pack('B', 118))
-                elif scLine == 'mov m,a':
+                elif sc_line == 'mov m,a':
                     romFile.write(pack('B', 119))
-                elif scLine == 'mov a,b':
+                elif sc_line == 'mov a,b':
                     romFile.write(pack('B', 120))
-                elif scLine == 'mov a,c':
+                elif sc_line == 'mov a,c':
                     romFile.write(pack('B', 121))
-                elif scLine == 'mov a,d':
+                elif sc_line == 'mov a,d':
                     romFile.write(pack('B', 122))
-                elif scLine == 'mov a,e':
+                elif sc_line == 'mov a,e':
                     romFile.write(pack('B', 123))
-                elif scLine == 'mov a,h':
+                elif sc_line == 'mov a,h':
                     romFile.write(pack('B', 124))
-                elif scLine == 'mov a,l':
+                elif sc_line == 'mov a,l':
                     romFile.write(pack('B', 125))
-                elif scLine == 'mov a,m':
+                elif sc_line == 'mov a,m':
                     romFile.write(pack('B', 126))
-                elif scLine == 'mov a,a':
+                elif sc_line == 'mov a,a':
                     romFile.write(pack('B', 127))
-                elif scLine == 'add b':
+                elif sc_line == 'add b':
                     romFile.write(pack('B', 128))
-                elif scLine == 'add c':
+                elif sc_line == 'add c':
                     romFile.write(pack('B', 129))
-                elif scLine == 'add d':
+                elif sc_line == 'add d':
                     romFile.write(pack('B', 130))
-                elif scLine == 'add e':
+                elif sc_line == 'add e':
                     romFile.write(pack('B', 131))
-                elif scLine == 'add h':
+                elif sc_line == 'add h':
                     romFile.write(pack('B', 132))
-                elif scLine == 'add l':
+                elif sc_line == 'add l':
                     romFile.write(pack('B', 133))
-                elif scLine == 'add m':
+                elif sc_line == 'add m':
                     romFile.write(pack('B', 134))
-                elif scLine == 'add a':
+                elif sc_line == 'add a':
                     romFile.write(pack('B', 135))
-                elif scLine == 'adc b':
+                elif sc_line == 'adc b':
                     romFile.write(pack('B', 136))
-                elif scLine == 'adc c':
+                elif sc_line == 'adc c':
                     romFile.write(pack('B', 137))
-                elif scLine == 'adc d':
+                elif sc_line == 'adc d':
                     romFile.write(pack('B', 138))
-                elif scLine == 'adc e':
+                elif sc_line == 'adc e':
                     romFile.write(pack('B', 139))
-                elif scLine == 'adc h':
+                elif sc_line == 'adc h':
                     romFile.write(pack('B', 140))
-                elif scLine == 'adc l':
+                elif sc_line == 'adc l':
                     romFile.write(pack('B', 141))
-                elif scLine == 'adc m':
+                elif sc_line == 'adc m':
                     romFile.write(pack('B', 142))
-                elif scLine == 'adc a':
+                elif sc_line == 'adc a':
                     romFile.write(pack('B', 143))
-                elif scLine == 'sub b':
+                elif sc_line == 'sub b':
                     romFile.write(pack('B', 144))
-                elif scLine == 'sub c':
+                elif sc_line == 'sub c':
                     romFile.write(pack('B', 145))
-                elif scLine == 'sub d':
+                elif sc_line == 'sub d':
                     romFile.write(pack('B', 146))
-                elif scLine == 'sub e':
+                elif sc_line == 'sub e':
                     romFile.write(pack('B', 147))
-                elif scLine == 'sub h':
+                elif sc_line == 'sub h':
                     romFile.write(pack('B', 148))
-                elif scLine == 'sub l':
+                elif sc_line == 'sub l':
                     romFile.write(pack('B', 149))
-                elif scLine == 'sub m':
+                elif sc_line == 'sub m':
                     romFile.write(pack('B', 150))
-                elif scLine == 'sub a':
+                elif sc_line == 'sub a':
                     romFile.write(pack('B', 151))
-                elif scLine == 'sbb b':
+                elif sc_line == 'sbb b':
                     romFile.write(pack('B', 152))
-                elif scLine == 'sbb c':
+                elif sc_line == 'sbb c':
                     romFile.write(pack('B', 153))
-                elif scLine == 'sbb d':
+                elif sc_line == 'sbb d':
                     romFile.write(pack('B', 154))
-                elif scLine == 'sbb e':
+                elif sc_line == 'sbb e':
                     romFile.write(pack('B', 155))
-                elif scLine == 'sbb h':
+                elif sc_line == 'sbb h':
                     romFile.write(pack('B', 156))
-                elif scLine == 'sbb l':
+                elif sc_line == 'sbb l':
                     romFile.write(pack('B', 157))
-                elif scLine == 'sbb m':
+                elif sc_line == 'sbb m':
                     romFile.write(pack('B', 158))
-                elif scLine == 'sbb a':
+                elif sc_line == 'sbb a':
                     romFile.write(pack('B', 159))
-                elif scLine == 'ana b':
+                elif sc_line == 'ana b':
                     romFile.write(pack('B', 160))
-                elif scLine == 'ana c':
+                elif sc_line == 'ana c':
                     romFile.write(pack('B', 161))
-                elif scLine == 'ana d':
+                elif sc_line == 'ana d':
                     romFile.write(pack('B', 162))
-                elif scLine == 'ana e':
+                elif sc_line == 'ana e':
                     romFile.write(pack('B', 163))
-                elif scLine == 'ana h':
+                elif sc_line == 'ana h':
                     romFile.write(pack('B', 164))
-                elif scLine == 'ana l':
+                elif sc_line == 'ana l':
                     romFile.write(pack('B', 165))
-                elif scLine == 'ana m':
+                elif sc_line == 'ana m':
                     romFile.write(pack('B', 166))
-                elif scLine == 'ana a':
+                elif sc_line == 'ana a':
                     romFile.write(pack('B', 167))
-                elif scLine == 'xra b':
+                elif sc_line == 'xra b':
                     romFile.write(pack('B', 168))
-                elif scLine == 'xra c':
+                elif sc_line == 'xra c':
                     romFile.write(pack('B', 169))
-                elif scLine == 'xra d':
+                elif sc_line == 'xra d':
                     romFile.write(pack('B', 170))
-                elif scLine == 'xra e':
+                elif sc_line == 'xra e':
                     romFile.write(pack('B', 171))
-                elif scLine == 'xra h':
+                elif sc_line == 'xra h':
                     romFile.write(pack('B', 172))
-                elif scLine == 'xra l':
+                elif sc_line == 'xra l':
                     romFile.write(pack('B', 173))
-                elif scLine == 'xra m':
+                elif sc_line == 'xra m':
                     romFile.write(pack('B', 174))
-                elif scLine == 'xra a':
+                elif sc_line == 'xra a':
                     romFile.write(pack('B', 175))
-                elif scLine == 'ora b':
+                elif sc_line == 'ora b':
                     romFile.write(pack('B', 176))
-                elif scLine == 'ora c':
+                elif sc_line == 'ora c':
                     romFile.write(pack('B', 177))
-                elif scLine == 'ora d':
+                elif sc_line == 'ora d':
                     romFile.write(pack('B', 178))
-                elif scLine == 'ora e':
+                elif sc_line == 'ora e':
                     romFile.write(pack('B', 179))
-                elif scLine == 'ora h':
+                elif sc_line == 'ora h':
                     romFile.write(pack('B', 180))
-                elif scLine == 'ora l':
+                elif sc_line == 'ora l':
                     romFile.write(pack('B', 181))
-                elif scLine == 'ora m':
+                elif sc_line == 'ora m':
                     romFile.write(pack('B', 182))
-                elif scLine == 'ora a':
+                elif sc_line == 'ora a':
                     romFile.write(pack('B', 183))
-                elif scLine == 'cmp b':
+                elif sc_line == 'cmp b':
                     romFile.write(pack('B', 184))
-                elif scLine == 'cmp c':
+                elif sc_line == 'cmp c':
                     romFile.write(pack('B', 185))
-                elif scLine == 'cmp d':
+                elif sc_line == 'cmp d':
                     romFile.write(pack('B', 186))
-                elif scLine == 'cmp e':
+                elif sc_line == 'cmp e':
                     romFile.write(pack('B', 187))
-                elif scLine == 'cmp h':
+                elif sc_line == 'cmp h':
                     romFile.write(pack('B', 188))
-                elif scLine == 'cmp l':
+                elif sc_line == 'cmp l':
                     romFile.write(pack('B', 189))
-                elif scLine == 'cmp m':
+                elif sc_line == 'cmp m':
                     romFile.write(pack('B', 190))
-                elif scLine == 'cmp a':
+                elif sc_line == 'cmp a':
                     romFile.write(pack('B', 191))
-                elif scLine == 'rnz':
+                elif sc_line == 'rnz':
                     romFile.write(pack('B', 192))
-                elif scLine == 'pop b':
+                elif sc_line == 'pop b':
                     romFile.write(pack('B', 193))
-                elif scLine.startswith('jnz'):
+                elif sc_line.startswith('jnz'):
                     romFile.write(pack('B', 194))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:2])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine.startswith('jmp'):
+                elif sc_line.startswith('jmp'):
                     romFile.write(pack('B', 195))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:2])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine.startswith('cnz'):
+                elif sc_line.startswith('cnz'):
                     romFile.write(pack('B', 196))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:2])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'push b':
+                elif sc_line == 'push b':
                     romFile.write(pack('B', 197))
-                elif scLine.startswith('adi'):
+                elif sc_line.startswith('adi'):
                     romFile.write(pack('B', 198))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:1])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:1])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:2]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:2]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'rst 0':
+                elif sc_line == 'rst 0':
                     romFile.write(pack('B', 199))
-                elif scLine == 'rz':
+                elif sc_line == 'rz':
                     romFile.write(pack('B', 200))
-                elif scLine == 'ret':
+                elif sc_line == 'ret':
                     romFile.write(pack('B', 201))
-                elif scLine.startswith('jz'):
+                elif sc_line.startswith('jz'):
                     romFile.write(pack('B', 202))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:2])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine.startswith('cz'):
+                elif sc_line.startswith('cz'):
                     romFile.write(pack('B', 204))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:2])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine.startswith('call'):
+                elif sc_line.startswith('call'):
                     romFile.write(pack('B', 205))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:2])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine.startswith('aci'):
+                elif sc_line.startswith('aci'):
                     romFile.write(pack('B', 206))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:1])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:1])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:2]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:2]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'rst 1':
+                elif sc_line == 'rst 1':
                     romFile.write(pack('B', 207))
-                elif scLine == 'rnc':
+                elif sc_line == 'rnc':
                     romFile.write(pack('B', 208))
-                elif scLine == 'pop d':
+                elif sc_line == 'pop d':
                     romFile.write(pack('B', 209))
-                elif scLine.startswith('jnc'):
+                elif sc_line.startswith('jnc'):
                     romFile.write(pack('B', 210))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:2])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine.startswith('out'):
+                elif sc_line.startswith('out'):
                     romFile.write(pack('B', 211))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:1])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:1])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:2]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:2]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine.startswith('cnc'):
+                elif sc_line.startswith('cnc'):
                     romFile.write(pack('B', 212))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:2])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'push d':
+                elif sc_line == 'push d':
                     romFile.write(pack('B', 213))
-                elif scLine.startswith('sui'):
+                elif sc_line.startswith('sui'):
                     romFile.write(pack('B', 214))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:1])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:1])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:2]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:2]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'rst 2':
+                elif sc_line == 'rst 2':
                     romFile.write(pack('B', 215))
-                elif scLine == 'rc':
+                elif sc_line == 'rc':
                     romFile.write(pack('B', 216))
-                elif scLine.startswith('jc'):
+                elif sc_line.startswith('jc'):
                     romFile.write(pack('B', 218))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:2])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine.startswith('in'):
+                elif sc_line.startswith('in'):
                     romFile.write(pack('B', 219))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:1])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:1])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:2]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:2]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine.startswith('cc'):
+                elif sc_line.startswith('cc'):
                     romFile.write(pack('B', 220))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:2])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine.startswith('sbi'):
+                elif sc_line.startswith('sbi'):
                     romFile.write(pack('B', 222))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:1])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:1])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:2]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:2]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'rst 3':
+                elif sc_line == 'rst 3':
                     romFile.write(pack('B', 223))
-                elif scLine == 'rpo':
+                elif sc_line == 'rpo':
                     romFile.write(pack('B', 224))
-                elif scLine == 'pop h':
+                elif sc_line == 'pop h':
                     romFile.write(pack('B', 225))
-                elif scLine.startswith('jpo'):
+                elif sc_line.startswith('jpo'):
                     romFile.write(pack('B', 226))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:2])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'xthl':
+                elif sc_line == 'xthl':
                     romFile.write(pack('B', 227))
-                elif scLine.startswith('cpo'):
+                elif sc_line.startswith('cpo'):
                     romFile.write(pack('B', 228))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:2])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'push h':
+                elif sc_line == 'push h':
                     romFile.write(pack('B', 229))
-                elif scLine.startswith('ani'):
+                elif sc_line.startswith('ani'):
                     romFile.write(pack('B', 230))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:1])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:1])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:2]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:2]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'rst 4':
+                elif sc_line == 'rst 4':
                     romFile.write(pack('B', 231))
-                elif scLine == 'rpe':
+                elif sc_line == 'rpe':
                     romFile.write(pack('B', 232))
-                elif scLine == 'pchl':
+                elif sc_line == 'pchl':
                     romFile.write(pack('B', 233))
-                elif scLine.startswith('jpe'):
+                elif sc_line.startswith('jpe'):
                     romFile.write(pack('B', 234))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:2])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'xchg':
+                elif sc_line == 'xchg':
                     romFile.write(pack('B', 235))
-                elif scLine.startswith('cpe'):
+                elif sc_line.startswith('cpe'):
                     romFile.write(pack('B', 236))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:2])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine.startswith('xri'):
+                elif sc_line.startswith('xri'):
                     romFile.write(pack('B', 238))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:2])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'rst 5':
+                elif sc_line == 'rst 5':
                     romFile.write(pack('B', 239))
-                elif scLine == 'rp':
+                elif sc_line == 'rp':
                     romFile.write(pack('B', 240))
-                elif scLine == 'pop psw':
+                elif sc_line == 'pop psw':
                     romFile.write(pack('B', 241))
-                elif scLine.startswith('jp'):
+                elif sc_line.startswith('jp'):
                     romFile.write(pack('B', 242))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:2])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'di':
+                elif sc_line == 'di':
                     romFile.write(pack('B', 243))
-                elif scLine.startswith('cp'):
+                elif sc_line.startswith('cp'):
                     romFile.write(pack('B', 244))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:2])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'push psw':
+                elif sc_line == 'push psw':
                     romFile.write(pack('B', 245))
-                elif scLine.startswith('ori'):
+                elif sc_line.startswith('ori'):
                     romFile.write(pack('B', 246))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:1])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:1])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:2]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:2]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'rst 6':
+                elif sc_line == 'rst 6':
                     romFile.write(pack('B', 247))
-                elif scLine == 'rm':
+                elif sc_line == 'rm':
                     romFile.write(pack('B', 248))
-                elif scLine == 'sphl':
+                elif sc_line == 'sphl':
                     romFile.write(pack('B', 249))
-                elif scLine.startswith('jm'):
+                elif sc_line.startswith('jm'):
                     romFile.write(pack('B', 250))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:2])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'ei':
+                elif sc_line == 'ei':
                     romFile.write(pack('B', 251))
-                elif scLine.startswith('cm'):
+                elif sc_line.startswith('cm'):
                     romFile.write(pack('B', 252))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:2])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine.startswith('cpi'):
+                elif sc_line.startswith('cpi'):
                     romFile.write(pack('B', 254))
                     try:
-                        if scLine.split(' ')[1] in variableAddr:
-                            romFile.write(
-                                variableAddr[scLine.split(' ')[1]][0:2])
+                        if sc_line.split(' ')[1] in variable_addr:
+                            romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
-                            romFile.write(UnHex(scLine.split(' ')[1][0:4]))
+                            romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
                     except ValueError:
                         raise TypeError
                     except TypeError:
-                        print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
-                elif scLine == 'rst 7':
+                elif sc_line == 'rst 7':
                     romFile.write(pack('B', 255))
-                elif scLine.split(' ')[1] == 'equ':
+                elif sc_line.split(' ')[1] == 'equ':
                     try:
-                        variableAddr[scLine.split(' ')[0]] = UnHex(
-                            scLine.split(' ')[2])
-                        print 'Updating variables'
+                        variable_addr[sc_line.split(' ')[0]] = UnHex(sc_line.split(' ')[2])
+                        print('Updating variables')
                     except TypeError:
-                        print Fore.RED + 'Digit count not divisable by 2: ' + scLine + ' : Linija ' + str(i)
+                        print(Fore.RED + 'Digit count not divisable by 2: ' + sc_line + ' : Linija ' + str(i))
                         exit(-1)
                 else:
-                    print Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i)
+                    print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                     exit(-1)
-        print Fore.WHITE + 'Closing down... \'' + Fore.YELLOW + fileName + Fore.WHITE + '\'\nEverything went ' + Fore.GREEN + 'fine'
+        print(Fore.WHITE + 'Closing down... \'' + Fore.YELLOW + file_name + Fore.WHITE
+              + '\'\nEverything went ' + Fore.GREEN + 'fine')
     except KeyboardInterrupt:
-        print Fore.RED + '\nExiting...'
+        print(Fore.RED + '\nExiting...')
         exit(-1)
     except EOFError:
-        print Fore.RED + '\nExiting...'
+        print(Fore.RED + '\nExiting...')
         exit(-1)
     except IOError:
-        print Fore.RED + 'Exiting...'
+        print(Fore.RED + 'Exiting...')
         exit(-1)
 
 
 if __name__ == "__main__":
     if len(argv) is not 2:
-        start(None)
+        start()
     else:
         start(argv[1])
