@@ -47,7 +47,7 @@ def start(arg=None):
     file_name = None
     try:
         if arg is None:
-            print('If you wish to know more please enter \'-p\' as an arguement')
+            print('If you wish to know more please enter \'-p\' as an argument')
             file_name = input('File path: ')
         elif arg == '-p':
             print('\nThis ' + Fore.BLUE + 'Intel' + Fore.WHITE + ' 8080 assembler was made for '
