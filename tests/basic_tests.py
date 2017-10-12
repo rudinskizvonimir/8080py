@@ -17,7 +17,7 @@ class SimpleRegressionTests(unittest.TestCase):
         print(x.stdout.read())
         with open('../examples/memcpy.rom', 'rb') as new_output:
             new_hex = hexlify(new_output.read())
-
-        assert original_hex == new_hex
-
-        os.remove('../examples/memcpy.rom')
+        try:
+            assert original_hex == new_hex, "{} != {}".format(original_hex, new_hex)
+        finally:
+            os.remove('../examples/memcpy.rom')
