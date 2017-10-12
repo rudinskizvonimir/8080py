@@ -80,9 +80,7 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(',')[1]][0:4])
                         else:
                             romFile.write(UnHex(sc_line.split(',')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'stax b':
@@ -100,9 +98,7 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(',')[1]][0:1])
                         else:
                             romFile.write(UnHex(sc_line.split(',')[1][0:2]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'rlc':
@@ -124,9 +120,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(',')[1]][0:1])
                         else:
                             romFile.write(UnHex(sc_line.split(',')[1][0:2]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == "rrc":
@@ -138,9 +133,7 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(',')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(',')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'stax d':
@@ -158,9 +151,7 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(',')[1]][0:1])
                         else:
                             romFile.write(UnHex(sc_line.split(',')[1][0:2]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'ral':
@@ -182,9 +173,7 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(',')[1]][0:1])
                         else:
                             romFile.write(UnHex(sc_line.split(',')[1][0:2]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'rar':
@@ -198,9 +187,7 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(',')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(',')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line.startswith('shld'):
@@ -210,9 +197,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'inx h':
@@ -228,9 +214,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(',')[1]][0:1])
                         else:
                             romFile.write(UnHex(sc_line.split(',')[1][0:2]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'daa':
@@ -244,9 +229,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'dcx h':
@@ -262,9 +246,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(',')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(',')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'cma':
@@ -278,9 +261,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(',')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(',')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line.startswith('sta'):
@@ -290,9 +272,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'inx sp':
@@ -308,9 +289,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(',')[1]][0:1])
                         else:
                             romFile.write(UnHex(sc_line.split(',')[1][0:2]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'stc':
@@ -324,9 +304,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'dcx sp':
@@ -342,9 +321,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(',')[1]][0:1])
                         else:
                             romFile.write(UnHex(sc_line.split(',')[1][0:2]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'cmc':
@@ -616,9 +594,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line.startswith('jmp'):
@@ -628,9 +605,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line.startswith('cnz'):
@@ -640,9 +616,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'push b':
@@ -654,9 +629,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:1])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:2]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'rst 0':
@@ -672,9 +646,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line.startswith('cz'):
@@ -684,9 +657,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line.startswith('call'):
@@ -696,9 +668,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line.startswith('aci'):
@@ -708,9 +679,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:1])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:2]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'rst 1':
@@ -726,9 +696,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line.startswith('out'):
@@ -738,9 +707,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:1])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:2]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line.startswith('cnc'):
@@ -750,9 +718,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'push d':
@@ -764,9 +731,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:1])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:2]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'rst 2':
@@ -780,9 +746,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line.startswith('in'):
@@ -792,9 +757,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:1])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:2]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line.startswith('cc'):
@@ -804,9 +768,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line.startswith('sbi'):
@@ -816,9 +779,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:1])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:2]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'rst 3':
@@ -834,9 +796,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'xthl':
@@ -848,9 +809,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'push h':
@@ -862,9 +822,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:1])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:2]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'rst 4':
@@ -880,9 +839,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'xchg':
@@ -894,9 +852,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line.startswith('xri'):
@@ -906,9 +863,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'rst 5':
@@ -924,9 +880,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'di':
@@ -938,9 +893,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'push psw':
@@ -952,9 +906,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:1])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:2]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'rst 6':
@@ -970,9 +923,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'ei':
@@ -984,9 +936,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line.startswith('cpi'):
@@ -996,9 +947,8 @@ def start(arg=None):
                             romFile.write(variable_addr[sc_line.split(' ')[1]][0:2])
                         else:
                             romFile.write(UnHex(sc_line.split(' ')[1][0:4]))
-                    except ValueError:
-                        raise TypeError
-                    except TypeError:
+                    except (ValueError, TypeError):
+
                         print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
                 elif sc_line == 'rst 7':
@@ -1015,14 +965,8 @@ def start(arg=None):
                     exit(-1)
         print(Fore.WHITE + 'Closing down... \'' + Fore.YELLOW + file_name + Fore.WHITE
               + '\'\nEverything went ' + Fore.GREEN + 'fine')
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, EOFError, IOError):
         print(Fore.RED + '\nExiting...')
-        exit(-1)
-    except EOFError:
-        print(Fore.RED + '\nExiting...')
-        exit(-1)
-    except IOError:
-        print(Fore.RED + 'Exiting...')
         exit(-1)
 
 
