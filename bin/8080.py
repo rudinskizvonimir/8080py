@@ -292,7 +292,7 @@ def start(arg=None):
     print(' \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\' + Style.RESET_ALL + Style.BRIGHT)
 
     print(Fore.WHITE + '\nPowered by ' + Fore.BLUE + 'Pyt' + Fore.YELLOW
-          + 'hon' + Fore.WHITE + ' 2.7\nCopyright (C) 2017, Zvonimir Rudinski')
+          + 'hon' + Fore.WHITE + '\nCopyright (C) 2017, Zvonimir Rudinski')
     file_name = None
     try:
         if arg is None:
