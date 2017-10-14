@@ -1,5 +1,13 @@
 #!/usr/bin/env python
 # coding=utf-8
+############## IMPORTS ##################
+from __future__ import print_function
+from os import path
+from sys import argv, exit
+from colorama import init, Fore, Style
+from struct import pack
+from binascii import unhexlify as UnHex
+#########################################
 """
     Copyright (C) 2017, Zvonimir Rudinski
     This program is free software: you can redistribute it and/or modify
@@ -15,19 +23,14 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-from os import path
-from sys import argv, exit
-from colorama import init, Fore, Style
-from struct import pack
-from binascii import unhexlify as UnHex
-from __future__ import print_function
+######### CROSS-PYTHON HACK #############
 try:
     input = raw_input  # Python2
 except NameError:
     pass  # Python3
-
+# Init colorama module
 init()
-
+# Instruction table dictionary
 INSTRUCTION_TABLE = {'nop': 0,
                      'stax b': 2,
                      'inx b': 3,
@@ -230,7 +233,7 @@ INSTRUCTION_TABLE = {'nop': 0,
                      'cmp a': 191,
                      'rnz': 192,
                      'pop b': 193}
-
+# Instruction table dictionary that expects a secondary parameter
 VAR_INSTRUCTION_TABLE = {'lxi b,': 1,
                          'mvi b,': 6,
                          'mvi c,': 14,
@@ -277,8 +280,8 @@ VAR_INSTRUCTION_TABLE = {'lxi b,': 1,
                          'cpi': 254,
                          }
 
-
-def start(arg=None):
+# Banner function
+def banner():
     print(Style.DIM)
     print('     ___________________________')
     print('    /                           /\\')
@@ -288,73 +291,82 @@ def start(arg=None):
     print('/___________________________/ /')
     print('\___________________________\/')
     print(' \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\' + Style.RESET_ALL + Style.BRIGHT)
-
     print(Fore.WHITE + '\nPowered by ' + Fore.BLUE + 'Pyt' + Fore.YELLOW
           + 'hon' + Fore.WHITE + '\nCopyright (C) 2017, Zvonimir Rudinski')
+# Help functiono
+def print_help():
+    print('\nThis ' + Fore.BLUE + 'Intel' + Fore.WHITE + ' 8080 assembler was made for ' + Fore.BLUE + 'Project ' + Fore.YELLOW + 'Week' + Fore.WHITE + ' in my school')
+    print('It is written in ' + Fore.BLUE + 'Pyt' + Fore.YELLOW + 'hon' + Fore.WHITE)
+    print('Modules: ' + Fore.RED + 'Co' + Fore.BLUE + 'lo' + Fore.YELLOW + 'ra' + Fore.GREEN + 'ma' + Fore.WHITE)
+# Main
+def start(arg=None):
+    banner() # Print banner 
+    # File name
     file_name = None
+    # Variable dictionary
+    variable_addr = {'null': UnHex('00')}
     try:
-        if arg is None:
+        if arg is None: # Check for arguements
             print('If you wish to know more please enter \'-p\' as an argument')
-            file_name = input('File path: ')
+            file_name = input('File path: ') # None found, please input the path
         elif arg == '-p':
-            print('\nThis ' + Fore.BLUE + 'Intel' + Fore.WHITE + ' 8080 assembler was made for '
-                  + Fore.BLUE + 'Project ' + Fore.YELLOW + 'Week' + Fore.WHITE + ' in my school')
-            print('It is written in ' + Fore.BLUE + 'Pyt' + Fore.YELLOW + 'hon' + Fore.WHITE)
-            print('Modules: ' + Fore.RED + 'Co' + Fore.BLUE + 'lo' +
-                  Fore.YELLOW + 'ra' + Fore.GREEN + 'ma' + Fore.WHITE)
+            print_help() # Print help then exit
             exit(0)
         else:
-            file_name = arg
-        print('Trying to open \'' + Fore.YELLOW + file_name + '\'' + Fore.WHITE)
-        if path.isfile(file_name) is False:
-            print(Fore.RED + 'Fatal error: ' + Fore.WHITE + 'Can\'t open \'' + Fore.YELLOW + file_name + '\'')
+            file_name = arg # Arguement is provided
+        print('Trying to open ' + Fore.YELLOW + '\'' + file_name + '\'' + Fore.WHITE)
+        if path.isfile(file_name) is False: # Check if the file exists
+            print(Fore.RED + 'Fatal error: ' + Fore.WHITE + 'File not found: ' + Fore.YELLOW + '\'' + file_name + '\'')
             raise IOError
-
+	# Read in the source code
         with open(file_name, 'r') as sourceFile:
             source_code = sourceFile.readlines()
+	# Strip the newlines
         for i in range(0, len(source_code)):
             source_code[i] = source_code[i].split('\n')[0]
-        variable_addr = {'null': UnHex('00')}
+	# Start writing to a rom file
         with open(file_name + '.rom', 'wb+') as romFile:
-            for i, sc_line in enumerate(source_code):
-                sc_line = sc_line.lower()
-
+	    # Check the line
+            for i,sc_line in enumerate(source_code):
+                sc_line = sc_line.lower() # Turn it to lower case for easier lookup
+		# Check if it's in the instruction table
                 if sc_line in INSTRUCTION_TABLE:
-                    romFile.write(pack('B', INSTRUCTION_TABLE[sc_line]))
-                elif sc_line.split(' ')[1] == 'equ':
+                    romFile.write(pack('B', INSTRUCTION_TABLE[sc_line])) # Write the opcode
+		    continue
+                elif sc_line.split(' ')[1] == 'equ': # Check if it's a variable declaration
                     try:
-                        variable_addr[sc_line.split(' ')[0]] = UnHex(sc_line.split(' ')[2])
+                        variable_addr[sc_line.split(' ')[0]] = UnHex(sc_line.split(' ')[2]) # It is, save it to a dictionary
                         print('Updating variables')
+		  	continue
+			# TODO: Check if the number can fit into 8bits or whatever 8080 did support
                     except TypeError:
-                        print(Fore.RED + 'Digit count not divisable by 2: ' + sc_line + ' : Line ' + str(i))
-                        exit(-1)
-
-                else:
+                        print(Fore.RED + 'Digit count not divisable by 2: ' + sc_line + ' : Line ' + str(i+1))
+                        raise SyntaxError
+                else: # Check if it's in another instruction table
                     for k in VAR_INSTRUCTION_TABLE.keys():
                         if sc_line.startswith(k):
-                            romFile.write(pack('B', VAR_INSTRUCTION_TABLE[k]))
-
+                            romFile.write(pack('B', VAR_INSTRUCTION_TABLE[k])) # Write the opcode
                             try:
+				# Check if it's a variable
                                 variable = sc_line.split(',')[1].strip() if "," in sc_line else sc_line.split()[1].strip()
-                                if variable in variable_addr:
+                                if variable in variable_addr: # If it is get it's value from the dict
                                     romFile.write(variable_addr[variable])
                                 else:
-                                    romFile.write(UnHex(variable))
+                                    romFile.write(UnHex(variable)) # Else write it down
+				break
                             except (ValueError, TypeError):
-                                print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
-                                exit(-1)
-
-            else:
-                print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i))
-                exit(-1)
-        print(Fore.WHITE + 'Closing down... \'' + Fore.YELLOW + file_name + Fore.WHITE
-          + '\'\nEverything went ' + Fore.GREEN + 'fine')
-
-    except (KeyboardInterrupt, EOFError, IOError):
+                                print(Fore.RED + 'Type error: ' + sc_line + ' : Line ' + str(i+1)) # That's not even a number...or a variable name
+                                raise SyntaxError
+		    else:
+		        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i+1))
+		        raise SyntaxError
+	# All was good
+        print(Fore.WHITE + 'Closing down... ' + Fore.YELLOW + '\'' + file_name + Fore.WHITE + '\'\nEverything went ' + Fore.GREEN + 'fine')
+    # Universal exception handler
+    except (KeyboardInterrupt, EOFError, IOError,SyntaxError):
         print(Fore.RED + '\nExiting...')
         exit(-1)
-
-
+# Call main
 if __name__ == "__main__":
     if len(argv) is not 2:
         start()
