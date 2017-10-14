@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # coding=utf-8
-from __future__ import print_function
-
 """
     Copyright (C) 2017, Zvonimir Rudinski
     This program is free software: you can redistribute it and/or modify
@@ -22,7 +20,7 @@ from sys import argv, exit
 from colorama import init, Fore, Style
 from struct import pack
 from binascii import unhexlify as UnHex
-
+from __future__ import print_function
 try:
     input = raw_input  # Python2
 except NameError:
@@ -284,7 +282,7 @@ def start(arg=None):
     print(Style.DIM)
     print('     ___________________________')
     print('    /                           /\\')
-    print('   /       Zvonimirov         _/ /\\')
+    print('   /     sadboyzvone\'s        _/ /\\')
     print('  /        Intel 8080        / \/')
     print(' /         Assembler         /\\')
     print('/___________________________/ /')
@@ -301,7 +299,7 @@ def start(arg=None):
         elif arg == '-p':
             print('\nThis ' + Fore.BLUE + 'Intel' + Fore.WHITE + ' 8080 assembler was made for '
                   + Fore.BLUE + 'Project ' + Fore.YELLOW + 'Week' + Fore.WHITE + ' in my school')
-            print('It is written in ' + Fore.BLUE + 'Pyt' + Fore.YELLOW + 'hon' + Fore.WHITE + ' 2.7')
+            print('It is written in ' + Fore.BLUE + 'Pyt' + Fore.YELLOW + 'hon' + Fore.WHITE)
             print('Modules: ' + Fore.RED + 'Co' + Fore.BLUE + 'lo' +
                   Fore.YELLOW + 'ra' + Fore.GREEN + 'ma' + Fore.WHITE)
             exit(0)
@@ -328,7 +326,7 @@ def start(arg=None):
                         variable_addr[sc_line.split(' ')[0]] = UnHex(sc_line.split(' ')[2])
                         print('Updating variables')
                     except TypeError:
-                        print(Fore.RED + 'Digit count not divisable by 2: ' + sc_line + ' : Linija ' + str(i))
+                        print(Fore.RED + 'Digit count not divisable by 2: ' + sc_line + ' : Line ' + str(i))
                         exit(-1)
 
                 else:
