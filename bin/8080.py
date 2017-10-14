@@ -293,7 +293,7 @@ def banner():
     print(' \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\' + Style.RESET_ALL + Style.BRIGHT)
     print(Fore.WHITE + '\nPowered by ' + Fore.BLUE + 'Pyt' + Fore.YELLOW
           + 'hon' + Fore.WHITE + '\nCopyright (C) 2017, Zvonimir Rudinski')
-# Help functiono
+# Help function
 def print_help():
     print('\nThis ' + Fore.BLUE + 'Intel' + Fore.WHITE + ' 8080 assembler was made for ' + Fore.BLUE + 'Project ' + Fore.YELLOW + 'Week' + Fore.WHITE + ' in my school')
     print('It is written in ' + Fore.BLUE + 'Pyt' + Fore.YELLOW + 'hon' + Fore.WHITE)
@@ -306,14 +306,14 @@ def start(arg=None):
     # Variable dictionary
     variable_addr = {'null': UnHex('00')}
     try:
-        if arg is None: # Check for arguements
+        if arg is None: # Check for arguments
             print('If you wish to know more please enter \'-p\' as an argument')
             file_name = input('File path: ') # None found, please input the path
         elif arg == '-p':
             print_help() # Print help then exit
             exit(0)
         else:
-            file_name = arg # Arguement is provided
+            file_name = arg # Argument is provided
         print('Trying to open ' + Fore.YELLOW + '\'' + file_name + '\'' + Fore.WHITE)
         if path.isfile(file_name) is False: # Check if the file exists
             print(Fore.RED + 'Fatal error: ' + Fore.WHITE + 'File not found: ' + Fore.YELLOW + '\'' + file_name + '\'')
@@ -340,7 +340,7 @@ def start(arg=None):
 		  	continue
 			# TODO: Check if the number can fit into 8bits or whatever 8080 did support
                     except TypeError:
-                        print(Fore.RED + 'Digit count not divisable by 2: ' + sc_line + ' : Line ' + str(i+1))
+                        print(Fore.RED + 'Digit count not divisible by 2: ' + sc_line + ' : Line ' + str(i+1))
                         raise SyntaxError
                 else: # Check if it's in another instruction table
                     for k in VAR_INSTRUCTION_TABLE.keys():
