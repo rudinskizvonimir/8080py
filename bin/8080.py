@@ -335,10 +335,13 @@ def start(arg=None):
 		    continue
                 elif sc_line.split(' ')[1] == 'equ': # Check if it's a variable declaration
                     try:
+                        if(int(sc_line.split(' ')[2]) >= (2**8)):
+                            print(Fore.RED + 'Variable too large: ' + sc_line + ' : Line ' + str(i+1))
+                            raise SyntaxError
                         variable_addr[sc_line.split(' ')[0]] = UnHex(sc_line.split(' ')[2]) # It is, save it to a dictionary
                         print('Updating variables')
 		  	continue
-			# TODO: Check if the number can fit into 8bits or whatever 8080 did support
+
                     except TypeError:
                         print(Fore.RED + 'Digit count not divisible by 2: ' + sc_line + ' : Line ' + str(i+1))
                         raise SyntaxError
