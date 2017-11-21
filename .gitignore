@@ -1,0 +1,10 @@
+lib
+include
+lib
+local
+tests
+bin/activate*
+easy*
+pip*
+python*
+wheel*
