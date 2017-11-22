@@ -295,7 +295,7 @@ def banner():
           + 'hon' + Fore.WHITE + '\nCopyright (C) 2017, Zvonimir Rudinski')
 # Help functiono
 def print_help():
-    print('\nThis ' + Fore.BLUE + 'Intel' + Fore.WHITE + ' 8080 assembler was made for ' + Fore.BLUE + 'Project ' + Fore.YELLOW + 'Week' + Fore.WHITE + ' in my school')
+    print('\nThis ' + Fore.BLUE + 'Intel' + Fore.WHITE + ' 8080 assembler was made for ' + Fore.BLUE + 'Project ' + Fore.YELLOW + 'Week' + Fore.WHITE + ' at my school.')
     print('It is written in ' + Fore.BLUE + 'Pyt' + Fore.YELLOW + 'hon' + Fore.WHITE)
     print('Modules: ' + Fore.RED + 'Co' + Fore.BLUE + 'lo' + Fore.YELLOW + 'ra' + Fore.GREEN + 'ma' + Fore.WHITE)
 # Main
@@ -307,9 +307,9 @@ def start(arg=None):
     variable_addr = {'null': UnHex('00')}
     try:
         if arg is None: # Check for arguements
-            print('If you wish to know more please enter \'-p\' as an argument')
+            print('If you wish to know more please enter \'-h\' as an argument')
             file_name = input('File path: ') # None found, please input the path
-        elif arg == '-p':
+        elif arg == '-h':
             print_help() # Print help then exit
             exit(0)
         else:
