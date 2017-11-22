@@ -293,11 +293,12 @@ def banner():
     print(' \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\' + Style.RESET_ALL + Style.BRIGHT)
     print(Fore.WHITE + '\nPowered by ' + Fore.BLUE + 'Pyt' + Fore.YELLOW
           + 'hon' + Fore.WHITE + '\nCopyright (C) 2017, Zvonimir Rudinski')
-# Help functiono
+# Help function
 def print_help():
     print('\nThis ' + Fore.BLUE + 'Intel' + Fore.WHITE + ' 8080 assembler was made for ' + Fore.BLUE + 'Project ' + Fore.YELLOW + 'Week' + Fore.WHITE + ' at my school.')
     print('It is written in ' + Fore.BLUE + 'Pyt' + Fore.YELLOW + 'hon' + Fore.WHITE)
     print('Modules: ' + Fore.RED + 'Co' + Fore.BLUE + 'lo' + Fore.YELLOW + 'ra' + Fore.GREEN + 'ma' + Fore.WHITE)
+    print('\nPass a file path as an arguement.')
 # Main
 def start(arg=None):
     banner() # Print banner 
@@ -306,14 +307,11 @@ def start(arg=None):
     # Variable dictionary
     variable_addr = {'null': UnHex('00')}
     try:
-        if arg is None: # Check for arguements
-            print('If you wish to know more please enter \'-h\' as an argument')
-            file_name = input('File path: ') # None found, please input the path
-        elif arg == '-h':
+        if arg is None or arg == '-h':
             print_help() # Print help then exit
             exit(0)
         else:
-            file_name = arg # Arguement is provided
+            file_name = arg # Argument is provided
         print('Trying to open ' + Fore.YELLOW + '\'' + file_name + '\'' + Fore.WHITE)
         if path.isfile(file_name) is False: # Check if the file exists
             print(Fore.RED + 'Fatal error: ' + Fore.WHITE + 'File not found: ' + Fore.YELLOW + '\'' + file_name + '\'')
@@ -335,12 +333,15 @@ def start(arg=None):
 		    continue
                 elif sc_line.split(' ')[1] == 'equ': # Check if it's a variable declaration
                     try:
+                        if(int(sc_line.split(' ')[2]) >= (2**8)):
+                            print(Fore.RED + 'Variable too large: ' + sc_line + ' : Line ' + str(i+1))
+                            raise SyntaxError
                         variable_addr[sc_line.split(' ')[0]] = UnHex(sc_line.split(' ')[2]) # It is, save it to a dictionary
                         print('Updating variables')
 		  	continue
-			# TODO: Check if the number can fit into 8bits or whatever 8080 did support
+
                     except TypeError:
-                        print(Fore.RED + 'Digit count not divisable by 2: ' + sc_line + ' : Line ' + str(i+1))
+                        print(Fore.RED + 'Digit count not divisible by 2: ' + sc_line + ' : Line ' + str(i+1))
                         raise SyntaxError
                 else: # Check if it's in another instruction table
                     for k in VAR_INSTRUCTION_TABLE.keys():
