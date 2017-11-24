@@ -7,4 +7,4 @@ python:
   - "pypy3"
 install:
   - pip install -r requirements.txt
-script: for f in examples/* ; do python bin/8080.py "$f" && rm "examples/$f.rom ; done;"
+script: for f in examples/* ; do python bin/8080.py "$f" && rm "$f.rom ; done;"
