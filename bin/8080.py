@@ -368,7 +368,7 @@ def start(arg=None):
 				pc += 3 # 3 bytes
 				break
                             except (ValueError, TypeError):
-                                print(Fore.RED + 'No var error: ' + sc_line + ' : Line ' + str(i+1)) # That's not even a number...or a variable name
+                                print(Fore.RED + 'Invalid variable use: ' + sc_line + ' : Line ' + str(i+1)) # That's not even a number...or a variable name
                                 raise SyntaxError
 		    else:
 		        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i+1))
