@@ -6,7 +6,7 @@ include/
 local/
 pip*
 bin/ea*
-
+bin/d80
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

@@ -305,7 +305,10 @@ def start(arg=None):
     # File name
     file_name = None
     # Variable dictionary
-    variable_addr = {'null': UnHex('00')}
+    labels = { }
+    var_dict = {'null': UnHex('00')}
+    # Program counter 
+    pc = 0
     try:
         if arg is None or arg == '-h':
             print_help() # Print help then exit
@@ -327,16 +330,22 @@ def start(arg=None):
 	    # Check the line
             for i,sc_line in enumerate(source_code):
                 sc_line = sc_line.lower() # Turn it to lower case for easier lookup
+		# Check if it's a label
+		if len(sc_line.split(':')) > 1:
+		    print("Updating labels")
+		    labels[sc_line.split(':')[0]] = UnHex(str(pc).zfill(4))
+		    continue
 		# Check if it's in the instruction table
                 if sc_line in INSTRUCTION_TABLE:
                     romFile.write(pack('B', INSTRUCTION_TABLE[sc_line])) # Write the opcode
+                    pc += 1 # 1 byte
 		    continue
                 elif sc_line.split(' ')[1] == 'equ': # Check if it's a variable declaration
                     try:
                         if(int(sc_line.split(' ')[2]) >= (2**8)):
                             print(Fore.RED + 'Variable too large: ' + sc_line + ' : Line ' + str(i+1))
                             raise SyntaxError
-                        variable_addr[sc_line.split(' ')[0]] = UnHex(sc_line.split(' ')[2]) # It is, save it to a dictionary
+                        var_dict[sc_line.split(' ')[0]] = UnHex(sc_line.split(' ')[2]) # It is, save it to a dictionary
                         print('Updating variables')
 		  	continue
 
@@ -350,10 +359,13 @@ def start(arg=None):
                             try:
 				# Check if it's a variable
                                 variable = sc_line.split(',')[1].strip() if "," in sc_line else sc_line.split()[1].strip()
-                                if variable in variable_addr: # If it is get it's value from the dict
-                                    romFile.write(variable_addr[variable])
+                                if variable in var_dict: # If it is get it's value from the dict
+                                    romFile.write(var_dict[variable])
+				if variable in labels: # It it is get it's value from the dict
+				    romFile.write(labels[variable])
                                 else:
                                     romFile.write(UnHex(variable)) # Else write it down
+				pc += 3 # 3 bytes
 				break
                             except (ValueError, TypeError):
                                 print(Fore.RED + 'Type error: ' + sc_line + ' : Line ' + str(i+1)) # That's not even a number...or a variable name
