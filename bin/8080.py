@@ -359,9 +359,9 @@ def start(arg=None):
                             try:
 				# Check if it's a variable
                                 variable = sc_line.split(',')[1].strip() if "," in sc_line else sc_line.split()[1].strip()
-                                if variable in var_dict == True: # If it is get it's value from the dict
+                                if variable in var_dict.keys(): # If it is get it's value from the dict
                                     romFile.write(var_dict[variable])
-				if variable in labels: # It it is get it's value from the dict
+				elif variable in labels.keys(): # It it is get it's value from the dict
 				    romFile.write(labels[variable])
                                 else:
                                     romFile.write(UnHex(variable)) # Else write it down
