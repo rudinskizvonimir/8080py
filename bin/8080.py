@@ -359,7 +359,7 @@ def start(arg=None):
                             try:
 				# Check if it's a variable
                                 variable = sc_line.split(',')[1].strip() if "," in sc_line else sc_line.split()[1].strip()
-                                if variable in var_dict: # If it is get it's value from the dict
+                                if variable in var_dict == True: # If it is get it's value from the dict
                                     romFile.write(var_dict[variable])
 				if variable in labels: # It it is get it's value from the dict
 				    romFile.write(labels[variable])
@@ -368,7 +368,7 @@ def start(arg=None):
 				pc += 3 # 3 bytes
 				break
                             except (ValueError, TypeError):
-                                print(Fore.RED + 'Type error: ' + sc_line + ' : Line ' + str(i+1)) # That's not even a number...or a variable name
+                                print(Fore.RED + 'No var error: ' + sc_line + ' : Line ' + str(i+1)) # That's not even a number...or a variable name
                                 raise SyntaxError
 		    else:
 		        print(Fore.RED + 'Syntax error: ' + sc_line + ' : Line ' + str(i+1))
@@ -378,7 +378,7 @@ def start(arg=None):
     # Universal exception handler
     except (KeyboardInterrupt, EOFError, IOError,SyntaxError):
         print(Fore.RED + '\nExiting...')
-        exit(-1)
+        exit(0) # A peaceful exit to be honest ;)
 # Call main
 if __name__ == "__main__":
     if len(argv) is not 2:
