@@ -15,9 +15,9 @@ from binascii import unhexlify as unHex
 
 ######### CROSS-PYTHON HACK #############
 try:
-    input = raw_input # For Python 2
+    input = raw_input  # For Python 2
 except NameError:
-    pass  # For Python 3 
+    pass  # For Python 3
 #########################################
 
 # Init colorama module
@@ -229,60 +229,65 @@ instructionTable = {
     'cmp a': 191,
     'rnz': 192,
     'pop b': 193,
-    }
+}
 
-# Instruction table dictionary that expects a secondary parameter
-varInstructionTable = {
-    'lxi b,': 1,
+# Instruction table dictionary that expects a secondary parameter (8-bit)
+varInstructionTable_EigthBit = {
     'mvi b,': 6,
     'mvi c,': 14,
-    'lxi d,': 17,
     'mvi d,': 22,
     'mvi e,': 30,
-    'lxi h,': 33,
-    'shld': 34,
     'mvi h,': 38,
-    'lhld': 42,
     'mvi l,': 46,
-    'lxi sp,': 49,
     'sta': 50,
     'mvi m,': 54,
     'lda': 58,
     'mvi a,': 62,
+    'adi': 198,
+    'aci': 206,
+    'out': 211,
+    'sui': 214,
+    'in': 219,
+    'sbi': 222,
+    'ani': 230,
+    'xri': 238,
+    'ori': 246,
+    'cpi': 254
+}
+# Instruction table dictionary that expects a secondary parameter (16-bit)
+varInstructionTable_SixteenBit = {
+    'lxi b,': 1,
+    'lxi d,': 17,
+    'lxi h,': 33,
+    'shld': 34,
+    'lhld': 42,
+    'lxi sp,': 49,
     'jnz': 194,
     'jmp': 195,
     'cnz': 196,
-    'adi': 198,
     'jz': 202,
     'cz': 204,
     'call': 205,
-    'aci': 206,
     'jnc': 210,
-    'out': 211,
     'cnc': 212,
-    'sui': 214,
-    'jc': 218,
-    'in': 219,
     'cc': 220,
-    'sbi': 222,
+    'jc': 218,
     'jpo': 226,
     'cpo': 228,
-    'ani': 230,
     'jpe': 234,
     'cpe': 236,
-    'xri': 238,
     'jp': 242,
     'cp': 244,
-    'ori': 246,
     'jm': 250,
-    'cm': 252,
-    'cpi': 254,
-    }
+    'cm': 252
+}
 
-helpArgVariants = ['-h','--h','-help','--help']
+helpArgVariants = ['-h', '--h', '-help', '--help']
 
 ######### FUNCTIONS #########
 # Print a small ASCII art banner
+
+
 def banner():
     print(Style.DIM)
     print('     ___________________________')
@@ -299,6 +304,8 @@ def banner():
           + '\nCopyright (C) 2017, Zvonimir Rudinski')
 
 # Print usage information
+
+
 def printHelp():
     print('\nThis ' + Fore.BLUE + 'Intel' + Fore.WHITE
           + ' 8080 assembler was made for ' + Fore.BLUE + 'Project '
@@ -319,7 +326,7 @@ def run(fileNameArg):
 
     # Variable and label info
     labelMap = {}
-    variableMap = { }
+    variableMap = {}
 
     # Program counter
     # TODO: If there is an ORG instruction change the PC to start from the specified address
@@ -331,10 +338,12 @@ def run(fileNameArg):
             exit(0)
         else:
             fileName = fileNameArg  # Argument is provided
-            print('Trying to open ' + Fore.YELLOW + '\'' + fileName + '\'' + Fore.WHITE)
+            print('Trying to open ' + Fore.YELLOW +
+                  '\'' + fileName + '\'' + Fore.WHITE)
             if path.isfile(fileName) is False:  # Check if the file exists
-                print(Fore.RED + 'Fatal error: ' + Fore.WHITE + 'File not found: ' + Fore.YELLOW + '\'' + fileName + '\'')
-                raise IOError # It doesn't raise an exception
+                print(Fore.RED + 'Fatal error: ' + Fore.WHITE +
+                      'File not found: ' + Fore.YELLOW + '\'' + fileName + '\'')
+                raise IOError  # It doesn't raise an exception
 
         # Read in the source code from the file
         with open(fileName, 'r') as sourceFile:
@@ -353,7 +362,8 @@ def run(fileNameArg):
                 # Check if it's a label
                 if len(scLine.split(':')) > 1:
                     print('Updating labels')
-                    labelMap[scLine.split(':')[0]] = unHex(str(programCounter).zfill(4))
+                    labelMap[scLine.split(':')[0]] = unHex(
+                        str(programCounter).zfill(4))
                     continue
 
                 # Check if it's in the instruction table
@@ -364,46 +374,79 @@ def run(fileNameArg):
                     continue
 
                 elif scLine.split(' ')[1] == 'equ':
-                # Check if it's a variable declaration
+                    # Check if it's a variable declaration
                     if int(scLine.split(' ')[2]) >= 2 ** 8:
-                        print(Fore.RED + 'Variable too large: ' + scLine + ' : Line ' + str(i + 1)) # Number is out of bounds for Intel 8080
+                        # Number is out of bounds for Intel 8080
+                        print(Fore.RED + 'Variable too large: ' +
+                              scLine + ' : Line ' + str(i + 1))
                         raise SyntaxError
-                    variableMap[scLine.split(' ')[0]] = unHex(scLine.split(' ')[2].ljust(4,'0'))  # It is, save it to a dictionary
+                    variableMap[scLine.split(' ')[0]] = unHex(scLine.split(
+                        ' ')[2].ljust(4, '0'))  # It is, save it to a dictionary
                     print('Updating variables')
                     continue
 
                 else:
-                    # Check if it's in another instruction table
-		    # TODO: Some instructions are 8-bit while others are 16-bit
-                    for tableKey in varInstructionTable.keys():
+                    # Check if it's in a instruction table (8-bit)
+                    for tableKey in varInstructionTable_EigthBit.keys():
                         if scLine.startswith(tableKey):
                             # Write the opcode
-                            romFile.write(pack('B',varInstructionTable[tableKey]))
+                            romFile.write(
+                                pack('B', varInstructionTable_EigthBit[tableKey]))
                             try:
                                 # Check if it's a variable
-                                variable = (scLine.split(',')[1].strip() if ',' in scLine else scLine.split()[1].strip())
+                                variable = (scLine.split(',')[1].strip(
+                                ) if ',' in scLine else scLine.split()[1].strip())
                                 if variable in variableMap.keys():  # If it is get it's value from the dict
-                                    romFile.write(variableMap[variable])
+                                    romFile.write(variableMap[variable][0])
                                 elif variable in labelMap.keys():
                                     # It it is get it's value from the dict
                                     romFile.write(labelMap[variable])
                                 else:
                                     # Else write it down
                                     romFile.write(unHex(variable))
-                                programCounter += 3  # 3 bytes
+                                programCounter += 2  # 2 bytes
                                 break
                             except (ValueError, TypeError):
                                 # That's not even a number...or a variable name
-                                print(Fore.RED + 'Invalid variable use: ' + scLine + ' : Line ' + str(i + 1))
+                                print(Fore.RED + 'Invalid variable use: ' +
+                                      scLine + ' : Line ' + str(i + 1))
                                 raise SyntaxError
                     else:
-                        print(Fore.RED + 'Syntax error: ' + scLine + ' : Line ' + str(i + 1))
-                        raise SyntaxError
+                        # Check if it's in a instruction table (16-bit)
+                        for tableKey in varInstructionTable_SixteenBit.keys():
+                            if scLine.startswith(tableKey):
+                                # Write the opcode
+                                romFile.write(
+                                    pack('B', varInstructionTable_SixteenBit[tableKey]))
+                                try:
+                                    # Check if it's a variable
+                                    variable = (scLine.split(',')[1].strip(
+                                    ) if ',' in scLine else scLine.split()[1].strip())
+                                    if variable in variableMap.keys():  # If it is get it's value from the dict
+                                        romFile.write(variableMap[variable])
+                                    elif variable in labelMap.keys():
+                                        # It it is get it's value from the dict
+                                        romFile.write(labelMap[variable])
+                                    else:
+                                        # Else write it down
+                                        romFile.write(unHex(variable))
+                                    programCounter += 3  # 3 bytes
+                                    break
+                                except (ValueError, TypeError):
+                                    # That's not even a number...or a variable name
+                                    print(Fore.RED + 'Invalid variable use: ' +
+                                          scLine + ' : Line ' + str(i + 1))
+                                    raise SyntaxError
+                        else:
+                            print(Fore.RED + 'Syntax error: ' +
+                                  scLine + ' : Line ' + str(i + 1))
+                            raise SyntaxError
 
         # All was good
-        print(Fore.WHITE + 'Closing down... ' + Fore.YELLOW + '\'' + fileName + Fore.WHITE + '\'\nEverything went ' + Fore.GREEN + 'fine')
+        print(Fore.WHITE + 'Closing down... ' + Fore.YELLOW + '\'' +
+              fileName + Fore.WHITE + '\'\nEverything went ' + Fore.GREEN + 'fine')
     except (KeyboardInterrupt, EOFError, IOError, SyntaxError):
-    # Universal exception handler
+        # Universal exception handler
         print(Fore.RED + '\nExiting...')
         exit(1)  # A peaceful exit to be honest ;)
 
@@ -414,5 +457,3 @@ if __name__ == '__main__':
         printHelp()
     else:
         run(argv[1])
-
-			
