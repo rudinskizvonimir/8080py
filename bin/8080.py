@@ -368,12 +368,13 @@ def run(fileNameArg):
                     if int(scLine.split(' ')[2]) >= 2 ** 8:
                         print(Fore.RED + 'Variable too large: ' + scLine + ' : Line ' + str(i + 1)) # Number is out of bounds for Intel 8080
                         raise SyntaxError
-                    variableMap[scLine.split(' ')[0]] = unHex(scLine.split(' ')[2].zfill(4))  # It is, save it to a dictionary
+                    variableMap[scLine.split(' ')[0]] = unHex(scLine.split(' ')[2].ljust(4,'0'))  # It is, save it to a dictionary
                     print('Updating variables')
                     continue
 
                 else:
                     # Check if it's in another instruction table
+		    # TODO: Some instructions are 8-bit while others are 16-bit
                     for tableKey in varInstructionTable.keys():
                         if scLine.startswith(tableKey):
                             # Write the opcode
