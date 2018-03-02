@@ -397,7 +397,7 @@ def run(fileNameArg):
                                 variable = (scLine.split(',')[1].strip(
                                 ) if ',' in scLine else scLine.split()[1].strip())
                                 if variable in variableMap.keys():  # If it is get it's value from the dict
-                                    romFile.write(variableMap[variable][0])
+                                    romFile.write(variableMap[variable][:1]) # Python3 had an error if I tried `variableMap[variable][0]` so I'll just start from the beginning and stop before the end...it's a hack I know ;)
                                 elif variable in labelMap.keys():
                                     # It it is get it's value from the dict
                                     romFile.write(labelMap[variable])
