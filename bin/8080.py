@@ -365,6 +365,15 @@ def run(fileNameArg):
                     labelMap[scLine.split(':')[0]] = unHex(
                         str(programCounter).zfill(4))
                     continue
+                
+                # Check for ORG
+                if scLine.split(' ')[0] == "org":
+                    programCounter = int(scLine.split(' ')[1].zfill(4))
+                    print(type(programCounter))
+                    print(int(programCounter))
+                    print("ORG set to " + str(programCounter))
+                    programCounter += int(4) # 2 bytes
+                    continue
 
                 # Check if it's in the instruction table
                 if scLine in instructionTable:
@@ -425,7 +434,7 @@ def run(fileNameArg):
                                     if variable in variableMap.keys():  # If it is get it's value from the dict
                                         romFile.write(variableMap[variable])
                                     elif variable in labelMap.keys():
-                                        # It it is get it's value from the dict
+                                        # It is, so get it's value from the dict
                                         romFile.write(labelMap[variable])
                                     else:
                                         # Else write it down
