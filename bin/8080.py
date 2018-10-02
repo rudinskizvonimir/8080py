@@ -369,10 +369,8 @@ def run(fileNameArg):
                 # Check for ORG
                 if scLine.split(' ')[0] == "org":
                     programCounter = int(scLine.split(' ')[1].zfill(4))
-                    print(type(programCounter))
-                    print(int(programCounter))
                     print("ORG set to " + str(programCounter))
-                    programCounter += int(4) # 2 bytes
+                    programCounter += 4 # 2 bytes
                     continue
 
                 # Check if it's in the instruction table
