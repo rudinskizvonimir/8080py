@@ -359,18 +359,18 @@ def run(fileNameArg):
             for (i, scLine) in enumerate(sourceCode):
                 scLine = scLine.lower()  # Turn it to lower case for easier lookup
 
-                # Check if it's a label
-                if len(scLine.split(':')) > 1:
-                    print('Updating labels')
-                    labelMap[scLine.split(':')[0]] = unHex(
-                        str(programCounter).zfill(4))
-                    continue
-                
                 # Check for ORG
                 if scLine.split(' ')[0] == "org":
                     programCounter = int(scLine.split(' ')[1].zfill(4))
                     print("ORG set to " + str(programCounter))
                     programCounter += 4 # 2 bytes
+                    continue
+
+                # Check if it's a label
+                if len(scLine.split(':')) > 1:
+                    print('Updating labels')
+                    labelMap[scLine.split(':')[0]] = unHex(
+                        str(programCounter).zfill(4))
                     continue
 
                 # Check if it's in the instruction table
