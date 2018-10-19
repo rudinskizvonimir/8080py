@@ -329,7 +329,6 @@ def run(fileNameArg):
     variableMap = {}
 
     # Program counter
-    # TODO: If there is an ORG instruction change the PC to start from the specified address
     programCounter = 0
 
     try:
@@ -363,7 +362,10 @@ def run(fileNameArg):
                 if scLine.split(' ')[0] == "org":
                     programCounter = int(scLine.split(' ')[1].zfill(4))
                     print("ORG set to " + str(programCounter))
-                    programCounter += 4 # 2 bytes
+                    romFile.seek(0,0)
+                    for x in range(0,programCounter):
+						romFile.write(pack('B', instructionTable['nop']))
+                    romFile.seek(programCounter,0)
                     continue
 
                 # Check if it's a label
