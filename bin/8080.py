@@ -359,6 +359,13 @@ def run(fileNameArg):
             for (i, scLine) in enumerate(sourceCode):
                 scLine = scLine.lower()  # Turn it to lower case for easier lookup
 
+                # Check for ORG
+                if scLine.split(' ')[0] == "org":
+                    programCounter = int(scLine.split(' ')[1].zfill(4))
+                    print("ORG set to " + str(programCounter))
+                    programCounter += 4 # 2 bytes
+                    continue
+
                 # Check if it's a label
                 if len(scLine.split(':')) > 1:
                     print('Updating labels')
@@ -425,7 +432,7 @@ def run(fileNameArg):
                                     if variable in variableMap.keys():  # If it is get it's value from the dict
                                         romFile.write(variableMap[variable])
                                     elif variable in labelMap.keys():
-                                        # It it is get it's value from the dict
+                                        # It is, so get it's value from the dict
                                         romFile.write(labelMap[variable])
                                     else:
                                         # Else write it down
