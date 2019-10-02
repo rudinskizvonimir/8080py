@@ -297,11 +297,8 @@ def banner():
     print(' /         Assembler         /\\')
     print('/___________________________/ /')
     print('\___________________________\/')
-    print(' \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\'
-          + Style.RESET_ALL + Style.BRIGHT)
-    print(Fore.WHITE + '\nPowered by ' + Fore.BLUE + 'Pyt'
-          + Fore.YELLOW + 'hon' + Fore.WHITE
-          + '\nCopyright (C) 2017, Zvonimir Rudinski')
+    print(' \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\' + Style.RESET_ALL + Style.BRIGHT)
+    print(Fore.WHITE + '\nPowered by ' + Fore.BLUE + 'Pyt' + Fore.YELLOW + 'hon' + Fore.WHITE + '\nCopyright (C) 2017, Zvonimir Rudinski')
 
 # Print usage information
 
